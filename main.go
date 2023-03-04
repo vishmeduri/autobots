@@ -62,24 +62,33 @@ func GetChargersByZip(zipcode string, apikey string) ([]Charger, error) {
 	return chargers, nil
 }
 
-// creart main function with zipcode as argument and prompt user for input
-
+// create a webservver that will listen for a zipcode and return the chargers in that zipcode in html
 func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		//get zipcode from url
+		zipcode := r.URL.Query().Get("zipcode")
+		//get apikey from url
+		apikey := r.URL.Query().Get("apikey")
+		//get chargers from openchargemap
+		chargers, err := GetChargersByZip(zipcode, apikey)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		//print chargers
+		fmt.Println(chargers)
+		//print chargers in html
+		fmt.Fprintf(w, "%v", chargers)
 
-	//prompt user for zipcode
-	fmt.Println("Enter a zipcode: ")
-	var zipcode string
-	fmt.Scanln(&zipcode)
+		//set html header in response
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		//set status code in response
+		w.WriteHeader(http.StatusOK)
+		//write html to response
+		w.Write([]byte("<html><body><h1>Chargers</h1></body></html>"))
+		//write chargers to response
+		w.Write([]byte(fmt.Sprintf("%v", chargers)))
 
-	fmt.Println("Enter apikey: ")
-	var apikey string
-	fmt.Scanln(&apikey)
-
-	chargers, err := GetChargersByZip(zipcode, apikey)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(chargers)
-	fmt.Println("Number of chargers: ", len(chargers))
-
+	})
+	http.ListenAndServe(":8080", nil)
 }
