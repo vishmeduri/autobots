@@ -82,12 +82,25 @@ func main() {
 
 		//set html header in response
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		//set status code in response
-		w.WriteHeader(http.StatusOK)
-		//write html to response
-		w.Write([]byte("<html><body><h1>Chargers</h1></body></html>"))
-		//write chargers to response
-		w.Write([]byte(fmt.Sprintf("%v", chargers)))
+		//print chargers in html
+
+		fmt.Fprintf(w, "<h1>Number of chargers: %d</h1>", len(chargers))
+		for _, charger := range chargers {
+			fmt.Fprintf(w, "<h2>%s</h2>", charger.AddressInfo.Title)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AddressLine1)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AddressLine2)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Town)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.StateOrProvince)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Postcode)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Country.Title)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactTelephone1)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactTelephone2)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactEmail)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AccessComments)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.RelatedURL)
+			fmt.Fprintf(w, "<p>%d</p>", charger.AddressInfo.Distance)
+			fmt.Fprintf(w, "<p>%d</p>", charger.AddressInfo.DistanceUnit)
+		}
 
 	})
 	http.ListenAndServe(":8080", nil)
