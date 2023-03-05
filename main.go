@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func GetChargersByZip(zipcode string, apikey string) ([]shortrange.Charger, error) {
+func GetChargersByZip(zipcode string, apikey string, homelat string, homelong string) ([]shortrange.Charger, error) {
 	//set url with zipcode and apikey
 	url := fmt.Sprintf("https://api.openchargemap.io/v3/poi/?output=json&countrycode=US&maxresults=1000000&postalcode=%s&compact=true&verbose=false&key=%s", zipcode, apikey)
 	//printf url
@@ -32,7 +32,7 @@ func GetChargersByZip(zipcode string, apikey string) ([]shortrange.Charger, erro
 	}
 
 	//return filtered chargers
-	return shortrange.FilterChargersByDistance(chargers, zipcode), nil
+	return shortrange.FilterChargersByDistance(chargers, zipcode, homelat, homelong), nil
 
 }
 
@@ -46,10 +46,18 @@ func main() {
 
 		//get apikey from url
 		apikey := r.URL.Query().Get("apikey")
+
+		//get latitude from url
+		homelat := r.URL.Query().Get("latitude")
+
+		//get longitude from url
+		homelong := r.URL.Query().Get("longitude")
+
 		//get chargers from openchargemap
-		chargers, err := GetChargersByZip(zipcode, apikey)
+		chargers, err := GetChargersByZip(zipcode, apikey, homelat, homelong)
 		//sort chargers by distance
 		chargers = shortrange.SortByDistance(chargers)
+
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

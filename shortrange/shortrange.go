@@ -3,6 +3,7 @@ package shortrange
 import (
 	"fmt"
 	"sort"
+	"strconv"
 
 	"github.com/umahmood/haversine"
 )
@@ -41,7 +42,7 @@ type Country struct {
 }
 
 // create a function to filter through the list of charger structs and return a list of chargers that are within a certain distance of the zipcode
-func FilterChargersByDistance(chargers []Charger, zipcode string) []Charger {
+func FilterChargersByDistance(chargers []Charger, zipcode string, homelat string, homelong string) []Charger {
 	var filteredChargers []Charger
 	for _, charger := range chargers {
 		if charger.AddressInfo.Postcode == zipcode {
@@ -49,7 +50,7 @@ func FilterChargersByDistance(chargers []Charger, zipcode string) []Charger {
 		}
 	}
 
-	return NearestFromReference(filteredChargers)
+	return NearestFromReference(filteredChargers, homelat, homelong)
 }
 
 // sort the nearest chargers by charger.AddressInfo.Distance
@@ -60,7 +61,7 @@ func SortByDistance(chargers []Charger) []Charger {
 	return chargers
 }
 
-func NearestFromReference(chargers []Charger) []Charger {
+func NearestFromReference(chargers []Charger, homelat string, homelong string) []Charger {
 
 	var nearestChargers []Charger
 	for _, charger := range chargers {
@@ -70,8 +71,17 @@ func NearestFromReference(chargers []Charger) []Charger {
 		chargerLong := charger.AddressInfo.Longitude
 
 		//get the latitude and longitude of the reference point
-		referenceLat := 43.7015503
-		referenceLong := -70.2359482
+		//convert the string to a float
+
+		referenceLat, err1 := strconv.ParseFloat(homelat, 64)
+		if err1 != nil {
+			fmt.Println(err1)
+		}
+
+		referenceLong, err2 := strconv.ParseFloat(homelong, 64)
+		if err2 != nil {
+			fmt.Println(err2)
+		}
 
 		// Define the two points you want to measure the distance between.
 		point1 := haversine.Coord{Lat: chargerLat, Lon: chargerLong}
