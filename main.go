@@ -69,24 +69,14 @@ func main() {
 
 		fmt.Fprintf(w, "<h1>Number of chargers: %d</h1>", len(chargers))
 		for _, charger := range chargers {
-			fmt.Fprintf(w, "<h2>%s</h2>", charger.AddressInfo.Title)
+			fmt.Fprintf(w, "<table<tr><td><h2>%s</h2>", charger.AddressInfo.Title)
 			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AddressLine1)
 			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AddressLine2)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Town)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.StateOrProvince)
+			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Town+","+charger.AddressInfo.StateOrProvince)
+			//fmt.Fprintf(w, "<p>%s</", charger.AddressInfo.StateOrProvince)
 			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Postcode)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.Country.Title)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactTelephone1)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactTelephone2)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.ContactEmail)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.AccessComments)
-			fmt.Fprintf(w, "<p>%s</p>", charger.AddressInfo.RelatedURL)
-			fmt.Fprintf(w, "<p>%d</p>", charger.AddressInfo.Distance)
-			//fmt.Fprintf(w, "<p>%d</p>", charger.AddressInfo.DistanceUnit)
-			fmt.Fprintf(w, "<p>%f</p>", charger.AddressInfo.Latitude)
-			fmt.Fprintf(w, "<p>%f</p>", charger.AddressInfo.Longitude)
-			//fmt.Fprintf(w, "<p>%d</p>", charger.AddressInfo.ID)
-			//fmt.Fprintf(w, "<p>%d</p>", charger.ID)
+			fmt.Fprintf(w, "<p><h1>%d miles</h1></p></td></tr></table>", charger.AddressInfo.Distance)
+
 			fmt.Fprintf(w, "<hr>")
 
 		}
