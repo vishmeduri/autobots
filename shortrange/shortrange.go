@@ -73,6 +73,7 @@ func NearestFromReference(chargers []Charger, homelat string, homelong string) [
 		//get the latitude and longitude of the reference point
 		//convert the string to a float
 
+		
 		referenceLat, err1 := strconv.ParseFloat(homelat, 64)
 		if err1 != nil {
 			fmt.Println(err1)
@@ -91,8 +92,7 @@ func NearestFromReference(chargers []Charger, homelat string, homelong string) [
 		distance, _ := haversine.Distance(point1, point2)
 
 		charger.AddressInfo.Distance = int(distance)
-		// Print the distance between the two points.
-		fmt.Println(distance)
+
 		nearestChargers = append(nearestChargers, charger)
 
 	}
