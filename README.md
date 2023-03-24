@@ -3,7 +3,7 @@ Bots created with inputs from chatgpt
 
 This is an experiment!
 
-This program gives you the close EV chargers by zipcode and your current lat, long
+This program gives you the closest EV chargers by zipcode and your current lat, long
 
 ## Install go
 
